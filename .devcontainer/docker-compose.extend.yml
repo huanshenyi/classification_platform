@@ -1,0 +1,5 @@
+version: '3'
+services:
+  python:
+    environment:
+      - HOME=/root/opt

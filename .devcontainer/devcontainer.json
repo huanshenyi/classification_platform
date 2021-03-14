@@ -1,0 +1,9 @@
+{
+    "name": "spider_python3",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "docker-compose.extend.yml"
+      ],
+    "service": "spider_python3",
+    "workspaceFolder": "/spider", 
+}
