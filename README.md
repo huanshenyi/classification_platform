@@ -24,3 +24,8 @@ scrapy startproject name
 make run
 ```
 
+## scrapy shell
+```text
+make shell URL=$url target
+```
+

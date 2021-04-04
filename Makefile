@@ -1,3 +1,5 @@
+URL ?= https://google.com
+
 .PHONY: docker-down
 docker-down:
 	@docker-compose down
@@ -11,3 +13,6 @@ docker-exec: docker-start
 
 run: docker-start
 	@docker-compose run python3 bash -c "cd /root/src/realestate && python main.py"
+
+shell: docker-start
+	@docker-compose run python3 bash -c "scrapy shell ${URL}"
