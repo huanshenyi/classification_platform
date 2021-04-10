@@ -6,6 +6,8 @@ import scrapy
 from scrapy import Request
 from dateutil.parser import parse as dateparse
 
+from realestate.items import SuumoItem
+
 
 class SuumoSpider(scrapy.Spider):
     name = 'suumo'
@@ -24,20 +26,44 @@ class SuumoSpider(scrapy.Spider):
                           callback=self.parse_details)
 
     def parse_details(self, response):
+        suumo_item = SuumoItem()
+
         # タイトル
         name_list = response.xpath("//h2[@class='property_unit-title']/a/text()").extract()
+
         # 物件名
         property_name_list = response.xpath("//dt[text()='物件名']/following-sibling::dd[1]/text()").extract()
+
         # 販売値段
         prices = response.xpath("//div[@class='dottable-line']/dl/dd/span/text()").extract()
         price_list = [re.findall("\\d+", i)[0] for i in prices]
+
         # 専有面積
         area = response.xpath("//table[@class='dottable-fix']/tbody/tr/td/dl/dt[text()='専有面積']/following-sibling::dd[1]").xpath('string(.)').extract()
         area_list = [re.findall('\\d+.\\d+', i)[0] for i in area]
+
         # 間取り
-        floor_plan = response.\
+        floor_plan_list = response.\
             xpath("//table[@class='dottable-fix']/tbody/tr/td/dl/dt[text()='間取り']/following-sibling::dd[1]/text()").extract()
+
         # 築年月
         age = response.xpath("//dt[text()='築年月']/following-sibling::dd[1]/text()").extract()
         age_list = [int((datetime.now()-dateparse(i[:4])).days / 365) for i in age]
-        pass
+
+        # バルコニー
+        balcony = response.xpath("//dt[text()='バルコニー']/following-sibling::dd[1]/text()").extract()
+        balcony_list = []
+        for i in balcony:
+            if len(i) == 1:
+                balcony_list.append(0)
+            else:
+                balcony_list.append(re.findall("\\d+", i)[0])
+        suumo_item["name"] = name_list
+        suumo_item["property_name"] = property_name_list
+        suumo_item["price"] = price_list
+        suumo_item["area"] = area_list
+        suumo_item["floor_plan"] = floor_plan_list
+        suumo_item["age"] = age_list
+        suumo_item["balcony"] = balcony_list
+
+        yield suumo_item

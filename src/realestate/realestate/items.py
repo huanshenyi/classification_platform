@@ -11,4 +11,12 @@ class RealestateItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
+
 class SuumoItem(scrapy.Item):
+    name = scrapy.Field()
+    property_name = scrapy.Field()
+    price = scrapy.Field()
+    area = scrapy.Field()
+    floor_plan = scrapy.Field()
+    age = scrapy.Field()
+    balcony = scrapy.Field()
