@@ -1,7 +1,10 @@
+import re
 from urllib import parse
+from datetime import datetime
 
 import scrapy
 from scrapy import Request
+from dateutil.parser import parse as dateparse
 
 
 class SuumoSpider(scrapy.Spider):
@@ -26,13 +29,15 @@ class SuumoSpider(scrapy.Spider):
         # 物件名
         property_name_list = response.xpath("//dt[text()='物件名']/following-sibling::dd[1]/text()").extract()
         # 販売値段
-        price = response.xpath("//div[@class='dottable-line']/dl/dd/span/text()").extract()
+        prices = response.xpath("//div[@class='dottable-line']/dl/dd/span/text()").extract()
+        price_list = [re.findall("\\d+", i)[0] for i in prices]
         # 専有面積
         area = response.xpath("//table[@class='dottable-fix']/tbody/tr/td/dl/dt[text()='専有面積']/following-sibling::dd[1]").xpath('string(.)').extract()
+        area_list = [re.findall('\\d+.\\d+', i)[0] for i in area]
         # 間取り
         floor_plan = response.\
             xpath("//table[@class='dottable-fix']/tbody/tr/td/dl/dt[text()='間取り']/following-sibling::dd[1]/text()").extract()
         # 築年月
         age = response.xpath("//dt[text()='築年月']/following-sibling::dd[1]/text()").extract()
-        # TODO:築年月を今までの年数へ変換
+        age_list = [int((datetime.now()-dateparse(i[:4])).days / 365) for i in age]
         pass
