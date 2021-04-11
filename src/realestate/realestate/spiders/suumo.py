@@ -58,12 +58,14 @@ class SuumoSpider(scrapy.Spider):
                 balcony_list.append(0)
             else:
                 balcony_list.append(re.findall("\\d+", i)[0])
-        suumo_item["name"] = name_list
-        suumo_item["property_name"] = property_name_list
-        suumo_item["price"] = price_list
-        suumo_item["area"] = area_list
-        suumo_item["floor_plan"] = floor_plan_list
-        suumo_item["age"] = age_list
-        suumo_item["balcony"] = balcony_list
+        for name, property, price, area, floor_plan, age, balcony in\
+                zip(name_list, property_name_list, price_list, area_list, floor_plan_list, age_list, balcony_list):
+            suumo_item["name"] = name
+            suumo_item["property_name"] = property
+            suumo_item["price"] = price
+            suumo_item["area"] = re.sub("m2", "", area)
+            suumo_item["floor_plan"] = floor_plan
+            suumo_item["age"] = age
+            suumo_item["balcony"] = balcony
 
-        yield suumo_item
+            yield suumo_item

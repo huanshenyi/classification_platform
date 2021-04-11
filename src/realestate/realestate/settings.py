@@ -64,7 +64,8 @@ DOWNLOAD_DELAY = 2
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'realestate.pipelines.JsonSuumoPipeline': 2,
+   # 'realestate.pipelines.JsonSuumoPipeline': 2,
+   'realestate.pipelines.CsvSuumoPipeline': 2,
    'realestate.pipelines.RealestatePipeline': 300,
 }
 

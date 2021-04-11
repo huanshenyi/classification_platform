@@ -1,9 +1,9 @@
 import codecs
 import json
 
-
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from scrapy.exporters import CsvItemExporter
 
 
 class RealestatePipeline:
@@ -22,4 +22,21 @@ class JsonSuumoPipeline:
         return item
 
     def spider_closed(self, spider):
+        self.file.close()
+
+
+class CsvSuumoPipeline:
+    def __init__(self):
+        self.file = open("suumo.csv", "wb")
+        self.exporter = CsvItemExporter(self.file, encoding='utf-8-sig',
+                                        fields_to_export=["name", "property_name", "price", "area", "floor_plan", "age",
+                                                          "balcony"])
+        self.exporter.start_exporting()
+
+    def process_item(self, item, spider):
+        self.exporter.export_item(item)
+        return item
+
+    def spider_closed(self, spider):
+        self.exporter.finish_exporting()
         self.file.close()
