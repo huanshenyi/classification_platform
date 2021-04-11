@@ -1,3 +1,4 @@
+import os
 # Scrapy settings for realestate project
 #
 # For simplicity, this file contains only settings considered important or
@@ -62,9 +63,10 @@ DOWNLOAD_DELAY = 2
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'realestate.pipelines.RealestatePipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'realestate.pipelines.JsonSuumoPipeline': 2,
+   'realestate.pipelines.RealestatePipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -86,3 +88,9 @@ DOWNLOAD_DELAY = 2
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# /root/src/realestate/realestate
+project_dir = os.path.dirname(os.path.abspath(__file__))
+
+# images_store
+IMAGES_STORE = os.path.join(project_dir, 'images')

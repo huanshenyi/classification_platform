@@ -36,7 +36,7 @@ class SuumoSpider(scrapy.Spider):
 
         # 販売値段
         prices = response.xpath("//div[@class='dottable-line']/dl/dd/span/text()").extract()
-        price_list = [re.findall("\\d+", i)[0] for i in prices]
+        price_list = [re.sub("\\D", "", i) for i in prices]
 
         # 専有面積
         area = response.xpath("//table[@class='dottable-fix']/tbody/tr/td/dl/dt[text()='専有面積']/following-sibling::dd[1]").xpath('string(.)').extract()
